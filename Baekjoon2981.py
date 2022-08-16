@@ -4,27 +4,58 @@
 
 import sys
 
+def gcd(a,b):
+
+   
+    n=a%b
+    
+    if(n==0):
+        return b
+    else:
+        return gcd(b,n)
+
 N=int(sys.stdin.readline())
 
+
 num=[]
-max=0
+for i in range(0,N):
+    a=int(sys.stdin.readline())
+    num.append(a)
+
+num=sorted(num)
+new=[]
 
 for i in range(0,N):
-    A=int(sys.stdin.readline())
-    if(max==0 or A>max):
-        max=A
-    num.append(A)
+    for a in range(0,N):
+        if(i!=a):
+            if(num[i]-num[a] not in new):
+                new.append(abs(num[i]-num[a]))
+
+new=list(set((new)))
+base=new[0]
+
+for i in range(1,len(new)):
+    base=abs(gcd(base,new[i]))
+
+
 
 ans=[]
-for i in range(2,int(max**0.5)+1):
-    count=0
-    set=num[0]%i
-    for a in range(0,len(num)):
-        if(num[a]%i!=set):
-            count=count+1
-            break
-    if(count==0):
-        ans.append(i)
 
-for i in range(0,len(ans)):
-    print(ans[i],end=" ")
+
+for i in range(1,int(base**0.5)+1):
+    if(base%i==0):
+        if(i!=1):
+            ans.append(i)
+        if(base//i not in ans and base//i!=i):
+            ans.append(base//i)
+
+
+ans=sorted(list(((ans))))
+
+for a in ans:
+    print(a,end=" ")    
+    
+
+
+# 12 6 9 69
+
