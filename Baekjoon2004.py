@@ -12,7 +12,7 @@ for i in range(N-M+1,N+1):
 
 for i in range(1,N-M+1):
     count=count//i
-print(count)
+    print(count)
 ans=0
 
 while(count%10==0):
