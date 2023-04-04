@@ -1,61 +1,72 @@
 #include <iostream>
-#include <algorithm>
+#include <string>
 using namespace std;
-unsigned long long N, M;
+
+int N;
+int num[64][64];
+
+string quard(int startx, int starty, int size)
+{
+    if (size == 1)
+    {
+        string ans = to_string(num[startx][starty]);
+        return ans;
+    }
+    string ans = "";
+    int start = num[startx][starty];
+    int check = 1;
+    for (int i = startx; i < startx + size; i++)
+    {
+        for (int j = starty; j < starty + size; j++)
+        {
+            if (num[i][j] != start)
+            {
+                check = 0;
+                break;
+            }
+        }
+    }
+
+    if (check == 1)
+    {
+
+        ans = ans + to_string(start);
+    }
+    else
+    {
+        ans = "(";
+        ans = ans + quard(startx, starty, size / 2);
+        ans = ans + quard(startx, starty + size / 2, size / 2);
+        ans = ans + quard(startx + size / 2, starty, size / 2);
+        ans = ans + quard(startx + size / 2, starty + size / 2, size / 2);
+        ans = ans + ")";
+    }
+
+    return ans;
+}
 int main()
 {
+    cin >> N;
 
-    cin >> N >> M;
-    unsigned long long count = 0;
-    long long tree[N + 1];
-    unsigned long long min = 1000000000;
-    unsigned long long max = 0;
-    for (long long i = 0; i < N; i++)
+    for (int i = 0; i < N; i++)
     {
-        cin >> tree[i];
-        if (tree[i] < min)
+        string c;
+        cin >> c;
+        for (int j = 0; j < N; j++)
         {
-            min = tree[i];
-        }
-        if (tree[i] > max)
-        {
-            max = tree[i];
+            num[i][j] = int(c[j]) - '0';
         }
     }
-    long long low = 0;
-    long long high = max;
-    long long mid = (min + max) / 2;
-    sort(tree, tree + N);
-    mid = (low + high) / 2;
-    long long ans = 0;
-    while (low <= high)
-    {
 
-        count = 0;
-        mid = (low + high) / 2;
-        for (long long i = 0; i < N; i++)
-        {
-            if (tree[i] - mid <= 0)
-            {
-                continue;
-            }
-            count = count + tree[i] - mid;
-        }
-
-        if (count >= M)
-        {
-
-            if (mid > ans)
-            {
-                ans = mid;
-            }
-            low = mid + 1;
-        }
-        if (count < M)
-        {
-
-            high = mid - 1;
-        }
-    }
-    cout << ans;
+    // for (int i = 0; i < N; i++)
+    // {
+    //     for (int j = 0; j < N; j++)
+    //     {
+    //         cout << num[i][j];
+    //     }
+    //     cout << endl;
+    // }
+    cout << '(';
+    cout << quard(0, 0, N);
+    cout << ')';
 }
