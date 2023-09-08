@@ -11,9 +11,9 @@ void bfs()
 {
     queue<pair<int, pair<int, int>>> q;
     q.push({0, {1, 1}});
-    q.push({1, {1, 1}});
+    // q.push({1, {1, 1}});
     visited[0][1][1] = 1;
-    visited[1][1][1] = 1;
+    // visited[1][1][1] = 1;
 
     while (!q.empty())
     {
