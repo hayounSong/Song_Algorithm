@@ -7,7 +7,6 @@ int direcx[4] = {0, 0, 1, -1};
 int direcy[4] = {1, -1, 0, 0};
 int N, M;
 int num[501][501] = {0};
-int visited[501][501] = {0};
 int maxi = 0;
 
 void back(int sx, int sy, int cur, int value, int lx, int ly)
@@ -38,11 +37,6 @@ void back(int sx, int sy, int cur, int value, int lx, int ly)
 
                 continue;
             }
-            // else if (visited[dx][dy] != 0)
-            // {
-
-            //     continue;
-            // }
             else
             {
 
@@ -92,7 +86,6 @@ int main()
         for (int j = 0; j < M; j++)
         {
             back(i, j, 0, num[i][j], 0, 0);
-            visited[i][j] = 1;
             check4(i, j);
         }
     }
