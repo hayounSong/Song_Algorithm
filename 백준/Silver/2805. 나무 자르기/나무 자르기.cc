@@ -45,10 +45,9 @@ int main()
         if (count >= M)
         {
 
-            if (mid > ans)
-            {
-                ans = mid;
-            }
+
+             ans = mid;
+            
             low = mid + 1;
         }
         if (count < M)
