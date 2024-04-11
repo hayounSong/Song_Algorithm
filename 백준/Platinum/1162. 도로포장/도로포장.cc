@@ -23,6 +23,10 @@ void daick()
         long long qc = q.top().second.first;
         q.pop();
 
+        if (qv > ans)
+        {
+            break;
+        }
         if (root[qc][qw] < qv)
         {
             continue;
