@@ -1,88 +1,90 @@
-#include <cstdio>
-#include <vector>
 #include <iostream>
+#include <vector>
 #include <queue>
+#include <algorithm>
+#include <climits>
+const long long MAXTIME = LONG_MAX;
 using namespace std;
+long long root[25][10001] = {0};
+long long N, M, K;
+vector<pair<long long, long long>> v[10001];
+#include <climits>
+#define TIME_LIMIT LLONG_MAX
+long long ans = TIME_LIMIT;
+void daick()
+{
+    priority_queue<pair<long long, pair<long long, long long>>> q;
+    root[0][1] = 0;
+    q.push({0, {0, 1}});
+    while (!q.empty())
+    {
+        long long qv = -q.top().first;
+        long long qw = q.top().second.second;
+        long long qc = q.top().second.first;
+        q.pop();
 
-int n, m, k;
-long long int cost[10001][21];
-vector<pair<int, int>> way[10001]; //pos, cost
-priority_queue<pair<long long, pair<int, int>>> pq; //cost,pos,포장
-
-long long int dijkstra(int start){
-    int here, there;
-    long long int here_c;
-    long long int there_c;
-    long long int min_c = -1;
-
-    for(int j=1; j<=n; j++){
-        for (int i=0; i<21; i++)
-            cost[j][i] = -1;
-    }
-    
-    cost[start][0] = 0;
-    pq.push(make_pair(-0, make_pair(start, 0)));
-    
-    while(!pq.empty()){
-        here_c = -pq.top().first;
-        here = pq.top().second.first;
-        int cnt = pq.top().second.second;
-        pq.pop();
-        
-        if(here_c> cost[here][cnt])
+        if (root[qc][qw] < qv)
+        {
             continue;
-        
-        for(int j=0; j<way[here].size(); j++){
-            
-            there = way[here][j].first;
-            there_c = here_c + way[here][j].second;
-            
-            if (cnt < k) //포장O -> 이동 비용이 0
+        }
+
+        for (long long i = 0; i < v[qw].size(); i++)
+        {
+            long long dw = v[qw][i].first;
+            long long dv = v[qw][i].second;
+
+            if (qv + dv < root[qc][dw])
             {
-                if(cost[there][cnt+1] == -1) {
-                    cost[there][cnt+1] = here_c;
-                    pq.push(make_pair(-here_c, make_pair(there, cnt+1)));
+                root[qc][dw] = qv + dv;
+                if (dw == N)
+                {
+                    if (qv + dv < ans)
+                    {
+                        ans = qv + dv;
+                    }
                 }
-                if (cost[there][cnt+1] > here_c) {
-                    cost[there][cnt+1] = here_c;
-                    pq.push(make_pair(-here_c, make_pair(there, cnt+1)));
-                }
+                q.push({-(qv + dv), {qc, dw}});
             }
-            
-            
-            if (cost[there][cnt] > there_c || cost[there][cnt] == -1) //포장X -> 이동비용이 있음!
+            if (qv < root[qc + 1][dw] && qc < K)
             {
-                cost[there][cnt] = there_c;
-                pq.push(make_pair(-there_c, make_pair(there, cnt)));
+                if (dw == N)
+                {
+                    if (qv < ans)
+                    {
+                        ans = qv;
+                    }
+                }
+                root[qc + 1][dw] = qv;
+                q.push({-(qv), {qc + 1, dw}});
             }
-            
-            
         }
     }
-    min_c = cost[n][0];
-    
-    for(int i=1; i<=k; i++){
-        if(min_c > cost[n][i] && cost[n][i] != -1)
-            min_c = cost[n][i];
-    }
-    return min_c;
 }
+int main()
+{
+    ios_base ::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    cin >> N >> M >> K;
 
-
-
-
-int main (void){
-
-    int a, b, cost;
-    scanf("%d %d %d", &n, &m, &k);
-  
-    for (int i=1; i<=m; i++){
-        scanf("%d %d %d", &a, &b, &cost);
-        way[a].push_back(make_pair(b, cost));
-        way[b].push_back(make_pair(a, cost));
+    for (long long i = 0; i < M; i++)
+    {
+        long long a, b, c;
+        cin >> a >> b >> c;
+        v[a].push_back({b, c});
+        v[b].push_back({a, c});
     }
-    
-
-    printf("%lld\n",dijkstra(1));
-    
+    for (long long i = 0; i <= K; i++)
+    {
+        for (long long j = 0; j <= N; j++)
+        {
+            root[i][j] = TIME_LIMIT;
+        }
+    }
+    daick();
+    if (ans == TIME_LIMIT)
+    {
+        ans = 0;
+    }
+    cout << ans;
 }
